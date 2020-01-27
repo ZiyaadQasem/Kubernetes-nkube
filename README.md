@@ -1,5 +1,8 @@
 # Recipe to Install n-nodes Kubernetes cluster on your windows local machine (production-like environment)
-The scripts used here have been adapted from [this blog](https://kubernetes.io/blog/2019/03/15/kubernetes-setup-using-ansible-and-vagrant/) with some necessary modifications to fix some bugs and facilitate the process of cluster creation.
+The scripts used here have been adapted from [this blog](https://kubernetes.io/blog/2019/03/15/kubernetes-setup-using-ansible-and-vagrant/) with some necessary modifications to fix some bugs and facilitate the process of cluster creation. The installation process is done via:
+- Vagrant as a virtual machines manager
+- Ansible (IT automation platform) 
+
 
 ## Prerequisites
 Before you begin, you should check if virtualization is supported on your windows. See [this link](https://www.shaileshjha.com/how-to-find-out-if-intel-vt-x-or-amd-v-virtualization-technology-is-supported-in-windows-10-windows-8-windows-vista-or-windows-7-machine/) to do that.
@@ -21,8 +24,12 @@ Performe the following steps with powershell :
 3. Run this command `vagrant up --provider virtualbox`
 > Note: this command will create 3-nodes cluster (1 maser and 2 workers). If you want more or less worker nodes you can just change the value of the variable WORKERS_NUMBER inside the file Vagrantfile.
 
-4. Bring the kubeconfig to your local machine  `$Env:KUBECONFIG=($Env:KUBECONFIG + ";"+$PWD.Path+"/kubernetes-setup/kubectl-config")`
-5. Set current context `kubectl config use-context nkube-cluster`
+4. To work with the cluster, you have two ways:
+
+     4.1. Download Kubectl from [this link](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-windows). Then, bring the kubeconfig to your local machine  `$Env:KUBECONFIG=($Env:KUBECONFIG + ";"+$PWD.Path+"/kubernetes-setup/kubectl-config")`. Finally, set current context `kubectl config use-context nkube-cluster`. by this way, you can interact with cluster from terminal of your local machine using kubectl commands.
+
+    4.2 Or you can login the master node (`vagrant ssh master`) and work with the cluster from there. 
+
 
 After you have done all the above steps, you should now be able to work with kubernetes cluster from your local terminal. To confirm this, the output from `kubectl get nodes` should be similar to:
 
